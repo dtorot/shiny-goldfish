@@ -1,0 +1,13 @@
+<h1>Unicorn List</h1>
+  {% if unicorn_list %}
+    <ul>
+      {% for unicorn in unicorn_list %}
+      <li>
+        <a href="{{ unicorn.get_absolute_url }}">{{ unicorn.name }}</a>
+        ({{unicorn.name}})
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no books in the Unicornary.</p>
+  {% endif %}
