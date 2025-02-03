@@ -28,4 +28,29 @@ class Task(models.Model):
             ),
         ]
 
+class Path (models.Model):
+    name = models.CharField(max_length=200)
+    author = models.ForeignKey('Author', on_delete=models.RESTRICT, null=True)
+
+    summary = models.TextField(
+        max_length=1000,
+        help_text= "A Brief description of the book",        
+    )
+    
+    refcode = models.CharField(
+        'RefCode',
+        max_length=13,
+
+    )
+
+    task = models.ManyToManyField(
+        Task, 
+        help_text="Select tasks for this path",
+    )
+
+    def __str__(self):
+        return self.name
+    
+    def get_absolute_url(self):
+        return reverse('path-detail', args=[str(self.id)])
     
