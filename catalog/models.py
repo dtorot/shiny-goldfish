@@ -30,11 +30,11 @@ class Task(models.Model):
 
 class Path (models.Model):
     name = models.CharField(max_length=200)
-    author = models.ForeignKey('Author', on_delete=models.RESTRICT, null=True)
+    #author = models.ForeignKey('Author', on_delete=models.RESTRICT, null=True)
 
     summary = models.TextField(
         max_length=1000,
-        help_text= "A Brief description of the book",        
+        help_text= "A Brief description of the Path",        
     )
     
     refcode = models.CharField(
