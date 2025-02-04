@@ -4,6 +4,7 @@ from django.db import models
 from django.urls import reverse
 from django.db.models import UniqueConstraint
 from django.db.models.functions import Lower
+import uuid
 
 
 class Task(models.Model):
@@ -53,4 +54,42 @@ class Path (models.Model):
     
     def get_absolute_url(self):
         return reverse('path-detail', args=[str(self.id)])
+    
+
+class Learning(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        help_text="Unique ID for this particular learning path",
+    )
+
+    path = models.ForeignKey(
+        'Path',
+        on_delete=models.RESTRICT,
+        null=True,
+    )
+
+    begin = models.DateField(null=True, blank=True)
+
+    PATH_STATUS = (
+        ('w','Walking'),
+        ('m','Maintenance'),
+        ('d','In debt'),
+        ('l','Lost'),
+        ('c','Completed path'),
+    )
+
+    status = models.CharField(
+        max_length=1,
+        choices=PATH_STATUS,
+        blank=True,
+        default='w',
+        help_text="Status of the Learning Path",
+    )
+
+    class Meta:
+        ordering = ['begin']
+
+    def __str__(self):
+        return f'{self.id} ({self.path.name})'
     
