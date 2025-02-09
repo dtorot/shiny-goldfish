@@ -14,6 +14,12 @@ class Task(models.Model):
         help_text="Knowledge task item...",
     )
 
+    creator = models.ForeignKey(
+        'Guache',         
+        on_delete=models.RESTRICT, 
+        null=True,
+    )
+
     def __str__(self):
         return self.name
     
@@ -29,9 +35,34 @@ class Task(models.Model):
             ),
         ]
 
+class Guache (models.Model):
+    first_name=models.CharField(max_length=100)
+    last_name=models.CharField(max_length=100)
+
+    karma=models.IntegerField()
+
+    class Meta:
+        ordering=['last_name','first_name']
+
+    def get_absolute_url(self):
+        return reverse ('guache-detail', args=[str(self.id)])
+    
+    def __str__(self):
+        return f'{self.last_name},{self.first_name}'
+
 class Path (models.Model):
     name = models.CharField(max_length=200)
-    #author = models.ForeignKey('Author', on_delete=models.RESTRICT, null=True)
+    author = models.ForeignKey(
+        'Guache', 
+        related_name="author_paths",
+        on_delete=models.RESTRICT, 
+        null=True,
+    )
+    apprentice = models.ManyToManyField(
+        Guache, 
+        related_name="learning_paths",
+        help_text="Add a new Apprentice to this Learning Path",
+    )
 
     summary = models.TextField(
         max_length=1000,
@@ -63,6 +94,8 @@ class Learning(models.Model):
         help_text="Unique ID for this particular learning path",
     )
 
+    apprentice = models.ForeignKey('Guache', on_delete=models.RESTRICT, null=True)
+    
     path = models.ForeignKey(
         'Path',
         on_delete=models.RESTRICT,
@@ -93,17 +126,3 @@ class Learning(models.Model):
     def __str__(self):
         return f'{self.id} ({self.path.name})'
     
-class Guache (models.Model):
-    first_name=models.CharField(max_length=100)
-    last_name=models.CharField(max_length=100)
-
-    karma=models.IntegerField()
-
-    class Meta:
-        ordering=['last_name','first_name']
-
-    def get_absolute_url(self):
-        return reverse ('guache-detail', args=[str(self.id)])
-    
-    def __str__(self):
-        return f'{self.last_name},{self.first_name}'
