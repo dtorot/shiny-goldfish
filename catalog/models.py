@@ -86,6 +86,11 @@ class Path (models.Model):
     def get_absolute_url(self):
         return reverse('path-detail', args=[str(self.id)])
     
+    def display_tasks(self):
+        return ', '.join(path.name for path in self.path.all  .all()[:3])
+    
+    display_tasks.short_description = "Path..."
+    
 
 class Learning(models.Model):
     id = models.UUIDField(
