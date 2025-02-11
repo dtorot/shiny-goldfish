@@ -19,4 +19,5 @@ class PathAdmin(admin.ModelAdmin):
 
 @admin.register(Learning)
 class LearningAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('id', 'apprentice','birth')
+    list_filter = ('status','birth')

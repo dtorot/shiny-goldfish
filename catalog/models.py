@@ -87,9 +87,9 @@ class Path (models.Model):
         return reverse('path-detail', args=[str(self.id)])
     
     def display_tasks(self):
-        return ', '.join(path.name for path in self.path.all  .all()[:3])
+        return ', '.join(task.name for task in self.task.all()[:3])
     
-    display_tasks.short_description = "Path..."
+    display_tasks.short_description ='Some Tasks included in this path...'
     
 
 class Learning(models.Model):
@@ -107,7 +107,7 @@ class Learning(models.Model):
         null=True,
     )
 
-    begin = models.DateField(null=True, blank=True)
+    last_visit = models.DateField(null=True, blank=True)
 
     PATH_STATUS = (
         ('w','Walking'),
@@ -125,8 +125,10 @@ class Learning(models.Model):
         help_text="Status of the Learning Path",
     )
 
+    birth = models.DateField(null=True,blank=True)
+
     class Meta:
-        ordering = ['begin']
+        ordering = ['birth']
 
     def __str__(self):
         return f'{self.id} ({self.path.name})'
