@@ -39,6 +39,9 @@ class Guache (models.Model):
     first_name=models.CharField(max_length=100)
     last_name=models.CharField(max_length=100)
 
+    date_of_birth = models.DateField(null=True, blank=True)
+    last_visit_date = models.DateField('last in', null=True, blank=True)
+
     karma=models.IntegerField()
 
     class Meta:
@@ -98,6 +101,8 @@ class Learning(models.Model):
         default=uuid.uuid4,
         help_text="Unique ID for this particular learning path",
     )
+
+    name = models.CharField(max_length=500, null=True)
 
     apprentice = models.ForeignKey('Guache', on_delete=models.RESTRICT, null=True)
     
