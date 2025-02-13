@@ -6,7 +6,7 @@ from django.db.models import UniqueConstraint
 from django.db.models.functions import Lower
 import uuid
 
-
+# The minimal unit of learning
 class Task(models.Model):
     name = models.CharField(
         max_length=200,
@@ -35,6 +35,8 @@ class Task(models.Model):
             ),
         ]
 
+
+# The user of the system, maybe a apprentice or a sensei
 class Guache (models.Model):
     first_name=models.CharField(max_length=100)
     last_name=models.CharField(max_length=100)
@@ -53,6 +55,9 @@ class Guache (models.Model):
     def __str__(self):
         return f'{self.last_name},{self.first_name}'
 
+
+# A planned learning Path
+# a Path contains one or more Tasks
 class Path (models.Model):
     name = models.CharField(max_length=200)
     author = models.ForeignKey(
@@ -93,8 +98,11 @@ class Path (models.Model):
         return ', '.join(task.name for task in self.task.all()[:3])
     
     display_tasks.short_description ='Some Tasks included in this path...'
-    
+ 
 
+   
+# The particular execution of a learning Path of a specific Guache
+# A Guache can have one or more Learnings in execution
 class Learning(models.Model):
     id = models.UUIDField(
         primary_key=True,
