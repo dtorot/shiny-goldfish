@@ -14,6 +14,7 @@ class Task(models.Model):
         help_text="Knowledge task item...",
     )
 
+    #Author of this Task
     creator = models.ForeignKey(
         'Guache',         
         on_delete=models.RESTRICT, 
@@ -36,7 +37,7 @@ class Task(models.Model):
         ]
 
 
-# The user of the system, maybe a apprentice or a sensei
+# The user of the system: a warrior. Maybe act like an apprentice or a sensei
 class Guache (models.Model):
     first_name=models.CharField(max_length=100)
     last_name=models.CharField(max_length=100)
@@ -57,7 +58,7 @@ class Guache (models.Model):
 
 
 # A planned learning Path
-# a Path contains one or more Tasks
+# a Path contains one or more "Learning Tasks"
 class Path (models.Model):
     name = models.CharField(max_length=200)
     author = models.ForeignKey(
@@ -94,6 +95,7 @@ class Path (models.Model):
     def get_absolute_url(self):
         return reverse('path-detail', args=[str(self.id)])
     
+    # ...get the related Learning Tasks to this Learning Path
     def display_tasks(self):
         return ', '.join(task.name for task in self.task.all()[:3])
     
@@ -102,7 +104,7 @@ class Path (models.Model):
 
    
 # The particular execution of a learning Path of a specific Guache
-# A Guache can have one or more Learnings in execution
+# A Guache can have one or more Learnings in execution (state defined in status)
 class Learning(models.Model):
     id = models.UUIDField(
         primary_key=True,

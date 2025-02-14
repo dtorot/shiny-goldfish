@@ -6,7 +6,9 @@ admin.site.register(Task)
 #admin.site.register(Path)
 #admin.site.register(Learning)
 #admin.site.register(Guache)
+#admin.site.register(Guache, GuacheAdmin)
 
+@admin.register(Guache)
 class GuacheAdmin(admin.ModelAdmin):
     list_display=('last_name', 'first_name', 'karma')
     fields = [
@@ -17,21 +19,6 @@ class GuacheAdmin(admin.ModelAdmin):
             'last_visit_date'
         )
     ]
-
-
-admin.site.register(Guache, GuacheAdmin)
-
-class LearningInline(admin.TabularInline):
-    model = (Learning)
-    extra = 0
-
-@admin.register(Path)
-class PathAdmin(admin.ModelAdmin):
-    list_display=('name', 'author', 'display_tasks')
-
-    inlines=[LearningInline]
-
-
 
 @admin.register(Learning)
 class LearningAdmin(admin.ModelAdmin):
@@ -50,4 +37,15 @@ class LearningAdmin(admin.ModelAdmin):
             }
         ),
     )
+
+class LearningInline(admin.TabularInline):
+    model = (Learning)
+    extra = 0
+
+@admin.register(Path)
+class PathAdmin(admin.ModelAdmin):
+    list_display=('name', 'author', 'display_tasks')
+
+    inlines=[LearningInline]
+
 
