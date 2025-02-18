@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Path List</h1>
+  {% if path_list %}
+    <ul>
+      {% for path in path_list %}
+      <li>
+        <a href="{{ path.get_absolute_url }}">{{ path.name }}</a>
+        ({{path.author}})
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no Paths in the library.</p>
+  {% endif %}
+{% endblock %}
+
