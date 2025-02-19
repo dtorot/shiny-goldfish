@@ -1,4 +1,4 @@
-#db.sqlite3
+trash/db.sqlite3
 __pycache__/
 staticfiles/
 #migrations/

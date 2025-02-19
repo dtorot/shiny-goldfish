@@ -13,7 +13,7 @@ class PathListView(generic.ListView):
     
     def get_context_data(self, **kwargs):
         context = super(PathListView, self).get_context_data(**kwargs)
-        context = ['some_data'] = 'This is just some data'
+        #context = ['some_data'] = 'This is just some data'
 
         return context
 
