@@ -5,7 +5,7 @@ from django.views import generic
 from .models import Task, Path, Learning, Guache
 
 class PathListView(generic.ListView):
-    model = Task
+    model = Path
     context_object_name = 'path_list'
 
     #queryset = Path.objects.filter(name__icontains='linux')[:5]
@@ -17,7 +17,8 @@ class PathListView(generic.ListView):
 
         return context
 
-
+class PathDetailView(generic.DetailView):
+    model = Path
 
 def index(request):
     num_paths = Task.objects.all().count()
