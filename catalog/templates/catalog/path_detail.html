@@ -1,0 +1,28 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Name: {{ path.name }}</h1>
+
+  <p><strong>Author:</strong> <a href="">{{ path.author }}</a></p>
+  <!-- author detail link not yet defined -->
+  <p><strong>Summary:</strong> {{ path.summary }}</p>
+  <p><strong>Reference Code:</strong> {{ path.refcode }}</p>
+  <p><strong>Tasks:</strong> {{ path.task.all|join:", " }}</p>
+
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Learning Paths</h4>
+
+    {% for lpath in path.task_set.all %}
+      <hr />
+      <p
+        class="{% if lpath.status == 'w' %}text-success{% elif lpath.status == 'd' %}text-danger{% else %}text-warning{% endif %}">
+        {{ lpath.get_status_display }}
+      </p>
+      {% if lpath.status != 'w' %}
+        <p><strong>Learning Path not active:</strong> {{ lpath.birth }}</p>
+      {% endif %}
+      <p><strong>Last Visited:</strong> {{ lpath.last_visit }}</p>
+      <p class="text-muted"><strong>Id:</strong> {{ lpath.id }}</p>
+    {% endfor %}
+  </div>
+{% endblock %}
