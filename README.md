@@ -19,3 +19,9 @@ python manage.py collectstatic
 ```python
 python manage.py runserver
 ```
+
+## To start a python virtualenv locally:
+
+```python
+>virtualenv name-new-virtualenv
+```
