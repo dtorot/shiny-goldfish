@@ -5,7 +5,7 @@ Template to codespaces...
 ## To start a python virtualenv locally:
 
 ```python
->virtualenv name-new-virtualenv
+virtualenv name-new-virtualenv
 ```
 
 ## installing dependancies
