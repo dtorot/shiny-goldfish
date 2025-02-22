@@ -2,6 +2,12 @@
 
 Template to codespaces...
 
+## To start a python virtualenv locally:
+
+```python
+>virtualenv name-new-virtualenv
+```
+
 ## installing dependancies
 
 ```python
@@ -20,8 +26,4 @@ python manage.py collectstatic
 python manage.py runserver
 ```
 
-## To start a python virtualenv locally:
 
-```python
->virtualenv name-new-virtualenv
-```
