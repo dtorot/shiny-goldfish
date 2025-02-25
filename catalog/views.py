@@ -8,6 +8,8 @@ class PathListView(generic.ListView):
     model = Path
     context_object_name = 'path_list'
 
+    paginate_by = 3 
+
     #queryset = Path.objects.filter(name__icontains='linux')[:5]
     #template_name = 'paths/learning_paths_list.html'
     
