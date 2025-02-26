@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Guache List</h1>
+  {% if guache_list %}
+    <ul>
+      {% for guache in guache_list %}
+      <li>
+        <a href="{{ guache.get_absolute_url }}">{{ guache.first_name }} {{guache.last_name}}</a>        
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no guaches in the gym.</p>
+  {% endif %}
+{% endblock %}

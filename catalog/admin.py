@@ -17,7 +17,8 @@ class GuacheAdmin(admin.ModelAdmin):
         (
             'date_of_birth',
             'last_visit_date'
-        )
+        ),
+        'karma',
     ]
 
 @admin.register(Learning)

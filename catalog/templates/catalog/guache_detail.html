@@ -1,0 +1,10 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Name: {{ guache.first_name }} {{ guache.last_name }}</h1>
+
+  <!-- author detail link not yet defined -->
+  <p><strong>Last Visit:</strong> {{ guache.last_visit_date}}</p>
+  <p><strong>Karma:</strong> {{ guache.karma }}</p>
+
+{% endblock %}

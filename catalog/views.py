@@ -8,7 +8,7 @@ class PathListView(generic.ListView):
     model = Path
     context_object_name = 'path_list'
 
-    paginate_by = 3 
+    paginate_by = 3
 
     #queryset = Path.objects.filter(name__icontains='linux')[:5]
     #template_name = 'paths/learning_paths_list.html'
@@ -23,7 +23,7 @@ class PathDetailView(generic.DetailView):
     model = Path
 
 def index(request):
-    num_paths = Task.objects.all().count()
+    num_paths = Path.objects.all().count()
     num_learning_paths = Learning.objects.all().count()
 
     num_learning_paths_active = Learning.objects.filter(status__exact='w').count()
@@ -38,3 +38,20 @@ def index(request):
     }
 
     return render(request, 'index.html', context=context)
+
+
+class GuacheListView(generic.ListView):
+    model = Guache
+    context_object_name = 'guache_list'
+
+    #queryset = Path.objects.filter(name__icontains='linux')[:5]
+    #template_name = 'paths/learning_paths_list.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(GuacheListView, self).get_context_data(**kwargs)
+        #context = ['some_data'] = 'This is just some data'
+
+        return context
+
+class GuacheDetailView(generic.DetailView):
+    model = Guache
