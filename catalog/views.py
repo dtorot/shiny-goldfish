@@ -30,11 +30,17 @@ def index(request):
 
     num_guaches = Guache.objects.count()
 
+    # Visits counter
+    visits = request.session.get('visits',0)
+    visits += 1
+    request.session['visits'] = visits
+
     context = {
         'num_paths': num_paths,
         'num_learning_paths': num_learning_paths,
         'num_learning_paths_active': num_learning_paths_active,
         'num_guaches': num_guaches,
+        'visits': visits,
     }
 
     return render(request, 'index.html', context=context)

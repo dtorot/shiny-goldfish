@@ -3,8 +3,8 @@
 {% block content %}
   <h1>Brain Gym Home</h1>
   <p>
-    Welcome to BrainGym, a website developed by
-    <em>OpenSAI Developer Network</em>!
+    Welcome to BrainGym, a website developed by 
+    <em>The OpenSAI Developer Network</em>
   </p>
   <h2>Stats</h2>
   <p>The Gym has the following record counts:</p>
@@ -14,4 +14,7 @@
     <li><strong>Active Learning Paths:</strong> {{ num_learning_paths_active }}</li>
     <li><strong>Guaches:</strong> {{ num_guaches }}</li>
   </ul>
+  <p>
+    You have visited this mondá {{visits}} time{{visits|pluralize}}
+  </p>
 {% endblock %}
