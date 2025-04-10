@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Learnings</h1>
+
+    {% if learninginstance_list %}
+    <ul>
+
+      {% for learning in learninginstance_list %}
+      <li class="{% if learning.is_overdue %}text-danger{% endif %}">
+        <a href="{% url 'learning-detail' learning.book.pk %}">{{ learning.path.name }}</a> ({{ learning.due_back }})
+      </li>
+      {% endfor %}
+    </ul>
+
+    {% else %}
+      <p>There are no learnings...</p>
+    {% endif %}
+{% endblock %}

@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.views import generic
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 # Create your views here.
 from .models import Task, Path, Learning, Guache
 
@@ -61,3 +63,17 @@ class GuacheListView(generic.ListView):
 
 class GuacheDetailView(generic.DetailView):
     model = Guache
+
+
+class LearningsByUserListView(LoginRequiredMixin,generic.ListView):
+    """Generic class-based view listing books on loan to current user."""
+    model = Learning
+    template_name = 'catalog/learninginstance_list_apprentice_user.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return (
+            Learning.objects.filter(apprentice=self.request.user)
+            .filter(status__exact='d')
+            .order_by('due_back')
+        )

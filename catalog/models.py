@@ -6,6 +6,12 @@ from django.db.models import UniqueConstraint
 from django.db.models.functions import Lower
 import uuid
 
+from django.conf import settings
+
+from django.contrib.auth.models import User
+
+from datetime import date
+
 # The minimal unit of learning
 class Task(models.Model):
     name = models.CharField(
@@ -114,7 +120,9 @@ class Learning(models.Model):
 
     name = models.CharField(max_length=500, null=True)
 
-    apprentice = models.ForeignKey('Guache', on_delete=models.RESTRICT, null=True)
+#    apprentice = models.ForeignKey('Guache', on_delete=models.RESTRICT, null=True)
+#    apprentice = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    apprentice = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     
     path = models.ForeignKey(
         'Path',
@@ -142,9 +150,15 @@ class Learning(models.Model):
 
     birth = models.DateField(null=True,blank=True)
 
+    due_back = models.DateField(null=True, blank=True)
+
     class Meta:
         ordering = ['birth']
 
     def __str__(self):
         return f'{self.id} ({self.path.name})'
+    
+    def is_overdue(self):
+        """This Learning path experience is overdue?"""
+        return bool(self.due_back and date.today() > self.due_back)
     
