@@ -63,7 +63,7 @@ class Guache (models.Model):
         return f'{self.last_name},{self.first_name}'
 
 
-# A planned learning Path
+# A Planned Learning Path
 # a Path contains one or more "Learning Tasks"
 class Path (models.Model):
     name = models.CharField(max_length=200)

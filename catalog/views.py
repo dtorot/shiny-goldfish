@@ -74,6 +74,6 @@ class LearningsByUserListView(LoginRequiredMixin,generic.ListView):
     def get_queryset(self):
         return (
             Learning.objects.filter(apprentice=self.request.user)
-            .filter(status__exact='d')
-            .order_by('due_back')
+            #.filter(status__exact='d')
+            #.order_by('due_back')
         )
