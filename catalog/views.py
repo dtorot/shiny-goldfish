@@ -68,12 +68,16 @@ class GuacheDetailView(generic.DetailView):
 class LearningsByUserListView(LoginRequiredMixin,generic.ListView):
     """Generic class-based view listing books on loan to current user."""
     model = Learning
+    context_object_name = 'learning_list'
     template_name = 'catalog/learninginstance_list_apprentice_user.html'
     paginate_by = 10
 
     def get_queryset(self):
         return (
-            Learning.objects.filter(apprentice=self.request.user)
+            Learning.objects.filter(apprentice=self.request.user).filter(status__exact='d')
             #.filter(status__exact='d')
             #.order_by('due_back')
         )
+    
+class LearningDetailView(generic.DetailView):
+    model = Learning

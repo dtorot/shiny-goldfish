@@ -25,7 +25,7 @@
               <li><a href="{% url 'guaches'%}"">All Guaches</a></li>
               {% if user.is_authenticated %}
               <li>User: {{ user.get_username }}</li>
-              <li><a href="{% url 'my-learning' %}">My Learnings</a></li>
+              <li><a href="{% url 'my-learnings' %}">My Learnings</a></li>
               <li>
                 <form id="logout-form" method="post" action="{% url 'logout' %}">
                   {% csrf_token %}
@@ -41,7 +41,7 @@
         </div>
         <div class="col-sm-10 ">{% block content %}{% endblock %}
 
-
+ 
 
 {% block pagination %}
     {% if is_paginated %}

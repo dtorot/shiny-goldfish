@@ -23,13 +23,13 @@ class GuacheAdmin(admin.ModelAdmin):
 
 @admin.register(Learning)
 class LearningAdmin(admin.ModelAdmin):
-    list_display = ('id', 'status', 'apprentice','birth', 'due_back')
+    list_display = ('name', 'status', 'apprentice','birth', 'due_back')
     list_filter = ('status','birth', 'due_back')
 
     fieldsets = (
         (
             None, {
-                'fields':('name', 'path', 'id', 'apprentice')
+                'fields':('name', 'path', 'apprentice')
             }
         ),
         (

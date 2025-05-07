@@ -7,12 +7,11 @@ from django.db.models.functions import Lower
 import uuid
 
 from django.conf import settings
-
 from django.contrib.auth.models import User
 
 from datetime import date
 
-# The minimal unit of learning
+# Learning Tasks, The minimal unit of learning
 class Task(models.Model):
     name = models.CharField(
         max_length=200,
@@ -112,10 +111,10 @@ class Path (models.Model):
 # The particular execution of a learning Path of a specific Guache
 # A Guache can have one or more Learnings in execution (state defined in status)
 class Learning(models.Model):
-    id = models.UUIDField(
-        primary_key=True,
+
+    serial = models.UUIDField(
         default=uuid.uuid4,
-        help_text="Unique ID for this particular learning path",
+        help_text="Unique UUID Serial for this particular learning path",
     )
 
     name = models.CharField(max_length=500, null=True)
@@ -158,6 +157,9 @@ class Learning(models.Model):
     def __str__(self):
         return f'{self.id} ({self.path.name})'
     
+    def get_absolute_url(self):
+        return reverse('learning-detail', args=[str(self.id)])
+
     def is_overdue(self):
         """This Learning path experience is overdue?"""
         return bool(self.due_back and date.today() > self.due_back)
