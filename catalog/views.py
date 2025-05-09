@@ -2,6 +2,9 @@ from django.shortcuts import render
 from django.views import generic
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
+
+from django.contrib.auth.decorators import login_required, permission_required
 
 # Create your views here.
 from .models import Task, Path, Learning, Guache
@@ -78,6 +81,25 @@ class LearningsByUserListView(LoginRequiredMixin,generic.ListView):
             #.filter(status__exact='d')
             #.order_by('due_back')
         )
-    
+
+class LearningsByStaffListView(PermissionRequiredMixin,generic.ListView):
+    """Generic class-based view listing books on loan to current user."""
+    model = Learning
+    context_object_name = 'staff_learning_list'
+    template_name = 'catalog/learninginstance_list_staff_user.html'
+    paginate_by = 10
+
+    permission_required = (
+        'can_mark_completed',
+        'change_learning',
+        'login_required',
+    )
+
+    def get_queryset(self):
+        return (
+            Learning.objects.all()
+        )
+
+
 class LearningDetailView(generic.DetailView):
     model = Learning

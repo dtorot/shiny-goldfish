@@ -8,5 +8,6 @@ urlpatterns = [
     path('guaches/', views.GuacheListView.as_view(), name='guaches'),
     path('guaches/<int:pk>', views.GuacheDetailView.as_view(), name='guache-detail'),
     path('mylearnings/', views.LearningsByUserListView.as_view(), name='my-learnings'),
+    path('learnings/', views.LearningsByStaffListView.as_view(), name='learnings'),
     path('learning/<int:pk>', views.LearningDetailView.as_view(), name='learning-detail'),
 ]

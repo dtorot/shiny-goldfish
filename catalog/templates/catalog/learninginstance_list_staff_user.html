@@ -1,0 +1,25 @@
+{% extends "base_generic.html" %}
+
+{% if user.is_staff %}
+{% if perms.catalog.can_mark_returned %}
+{% block content %}
+    <h1>System Learnings</h1>
+
+    {% if staff_learning_list %}
+    <ul>
+
+      {% for learning in staff_learning_list %}
+      <li class="{% if learning.is_overdue %}text-danger{% endif %}">
+        <a href="{% url 'learning-detail' learning.id %}">{{ learning.path }}</a> ({{ learning.due_back }})
+      </li>
+      {% endfor %}
+    </ul>
+
+    {% else %}
+      <p>There are no learnings...</p>
+    {% endif %}
+    {% endif %}    
+    {% endif %}    
+
+    {% endblock %}
+ 
