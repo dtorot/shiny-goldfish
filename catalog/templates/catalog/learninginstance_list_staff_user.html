@@ -1,7 +1,6 @@
 {% extends "base_generic.html" %}
 
-{% if user.is_staff %}
-{% if perms.catalog.can_mark_returned %}
+
 {% block content %}
     <h1>System Learnings</h1>
 
@@ -18,8 +17,6 @@
     {% else %}
       <p>There are no learnings...</p>
     {% endif %}
-    {% endif %}    
-    {% endif %}    
 
     {% endblock %}
  
