@@ -8,7 +8,7 @@
 
       {% for learning in learning_list %}
       <li class="{% if learning.is_overdue %}text-danger{% endif %}">
-        <a href="{% url 'learning-detail' learning.id %}">{{ learning.path }}</a> ({{ learning.due_back }})
+        <a href="{% url 'learning-detail' learning.id %}">{{ learning.name }} from {{ learning.path }}</a> ({{ learning.due_back }})
       </li>
       {% endfor %}
     </ul>

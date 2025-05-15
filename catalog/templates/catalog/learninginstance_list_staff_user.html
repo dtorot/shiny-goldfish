@@ -9,14 +9,21 @@
 
       {% for learning in staff_learning_list %}
       <li class="{% if learning.is_overdue %}text-danger{% endif %}">
-        <a href="{% url 'learning-detail' learning.id %}">{{ learning.path }}</a> ({{ learning.due_back }})
+        <a href="{% url 'learning-detail' learning.id %}">{{ learning.name }}</a> from Path: <a href="{% url 'path-detail' learning.path.id %}">{{ learning.path }}</a> ({{ learning.due_back }})
       </li>
       {% endfor %}
+      
     </ul>
 
     {% else %}
       <p>There are no learnings...</p>
     {% endif %}
-
+    {% if perms.catalog.can_mark_completed %}
+      <!-- We can mark a BookInstance as returned. -->
+      <!-- Perhaps add code to link to a "book return" view here. -->
+      <p class="text-success">This user can mark a Learning like completed...</p>
+    {% else %}
+      <p class="text-danger">This user doesn't can mark a Learning like completed...</p>
+    {% endif %}
     {% endblock %}
  

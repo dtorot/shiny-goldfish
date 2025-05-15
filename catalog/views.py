@@ -89,11 +89,11 @@ class LearningsByStaffListView(PermissionRequiredMixin,generic.ListView):
     template_name = 'catalog/learninginstance_list_staff_user.html'
     paginate_by = 10
 
-    #permission_required = (
+    permission_required = (
     #    'can_mark_completed',
-    #    'change_learning',
+        'catalog.change_learning',
     #    'login_required',
-    #)
+    )
 
     def get_queryset(self):
         return (
