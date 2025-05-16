@@ -9,7 +9,7 @@
 
       {% for learning in staff_learning_list %}
       <li class="{% if learning.is_overdue %}text-danger{% endif %}">
-        <a href="{% url 'learning-detail' learning.id %}">{{ learning.name }}</a> from Path: <a href="{% url 'path-detail' learning.path.id %}">{{ learning.path }}</a> ({{ learning.due_back }})
+        <a href="{% url 'learning-detail' learning.id %}">{{ learning.name }}</a> from Path: <a href="{% url 'path-detail' learning.path.id %}">{{ learning.path }}</a> ({{ learning.due_back }}) - {{learning.apprentice}}
       </li>
       {% endfor %}
       
