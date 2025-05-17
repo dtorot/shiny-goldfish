@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Renew: {{ learning.name }}</h1>
+  <p>Apprentice: {{ learning.apprentice }}</p>
+  <p {% if learning.is_overdue %} class="text-danger"{% endif %} >Due date: {{ learning.due_back }}</p>
+
+  <form action="" method="post">
+    {% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    </table>
+    <input type="submit" value="Submit">
+  </form>
+{% endblock %}
