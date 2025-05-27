@@ -9,10 +9,12 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
 
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 from catalog.forms import RenewLearningForm
 
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from .models import Guache
 
 
 # Create your views here.
@@ -142,3 +144,29 @@ def renew_learning_master(request, pk):
     }
 
     return render(request, 'catalog/learning_renew_master.html', context)
+
+class GuacheCreate(PermissionRequiredMixin, CreateView):
+    model = Guache
+    fields = ['first_name', 'last_name', 'date_of_birth', 'last_visit_date']
+    initial = {'last_visit_date': '11/11/2023'}
+    permission_required = 'catalog.add_guache'
+
+class GuacheUpdate(PermissionRequiredMixin, UpdateView):
+    model = Guache
+    # Not recommended (potential security issue if more fields added)
+    fields = '__all__'
+    permission_required = 'catalog.change_guache'
+
+class GuacheDelete(PermissionRequiredMixin, DeleteView):
+    model = Guache
+    success_url = reverse_lazy('guaches')
+    permission_required = 'catalog.delete_guache'
+
+    def form_valid(self, form):
+        try:
+            self.object.delete()
+            return HttpResponseRedirect(self.success_url)
+        except Exception as e:
+            return HttpResponseRedirect(
+                reverse("guache-delete", kwargs={"pk": self.object.pk})
+            )
