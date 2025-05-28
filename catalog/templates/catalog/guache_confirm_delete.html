@@ -1,0 +1,25 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h1>Delete Guache: {{ guache }}</h1>
+
+{% if guache.book_set.all %}
+
+<p>You can't delete this Guache until all their Paths have been deleted:</p>
+<ul>
+  {% for path in guache.path_set.all %}
+    <li><a href="{% url 'path-detail' path.pk %}">{{book}}</a> ({{path.learning_set.all.count}})</li>
+  {% endfor %}
+</ul>
+
+{% else %}
+<p>Are you sure you want to delete the guache?</p>
+
+<form action="" method="POST">
+  {% csrf_token %}
+  <input type="submit" action="" value="Yes, delete.">
+</form>
+{% endif %}
+
+{% endblock %}

@@ -147,7 +147,7 @@ def renew_learning_master(request, pk):
 
 class GuacheCreate(PermissionRequiredMixin, CreateView):
     model = Guache
-    fields = ['first_name', 'last_name', 'date_of_birth', 'last_visit_date']
+    fields = ['first_name', 'last_name', 'date_of_birth', 'karma', 'last_visit_date']
     initial = {'last_visit_date': '11/11/2023'}
     permission_required = 'catalog.add_guache'
 

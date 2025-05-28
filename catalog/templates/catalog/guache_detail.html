@@ -8,3 +8,21 @@
   <p><strong>Karma:</strong> {{ guache.karma }}</p>
 
 {% endblock %}
+
+{% block sidebar %}
+  {{ block.super }}
+
+  {% if perms.catalog.change_guache or perms.catalog.delete_guache %}
+  <hr>
+  <ul class="sidebar-nav">
+    {% if perms.catalog.change_author %}
+      <li><a href="{% url 'guache-update' guache.id %}">Update guache</a></li>
+    {% endif %}
+    {% if not guache.path_set.all and perms.catalog.delete_guache %}
+      <li><a href="{% url 'guache-delete' guache.id %}">Delete Guache</a></li>
+    {% endif %}
+    </ul>
+  {% endif %}
+
+{% endblock %}
+
