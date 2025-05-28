@@ -36,7 +36,14 @@
               <li><a href="{% url 'login' %}?next={{ request.path }}">Login</a></li>
             {% endif %}              
             {% if user.is_staff %}
+            <hr>
+            <ul class="sidebar-nav">
+              <li>Staff</li>
               <li><a href="{% url 'learnings' %}">Learnings</a></li>
+              {% if perms.catalog.add_guache %}
+                <li><a href="{% url 'guache-create' %}">Create Guache</a></li>
+              {% endif %}
+            </ul>
             {% endif %}
             </ul>
             
