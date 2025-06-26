@@ -170,3 +170,8 @@ class GuacheDelete(PermissionRequiredMixin, DeleteView):
             return HttpResponseRedirect(
                 reverse("guache-delete", kwargs={"pk": self.object.pk})
             )
+        
+class PathCreate(PermissionRequiredMixin, CreateView):
+    model = Path
+    fields = ['name', 'author', 'summary', 'refcode', 'task']
+    permission_required = 'catalog.add_path'
