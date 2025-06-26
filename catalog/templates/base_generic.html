@@ -43,6 +43,9 @@
               {% if perms.catalog.add_guache %}
                 <li><a href="{% url 'guache-create' %}">Create Guache</a></li>
               {% endif %}
+              {% if perms.catalog.add_path %}
+                <li><a href="{% url 'path-create' %}">Create Path</a></li>
+              {% endif %}
             </ul>
             {% endif %}
             </ul>
