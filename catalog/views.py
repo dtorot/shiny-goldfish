@@ -175,3 +175,9 @@ class PathCreate(PermissionRequiredMixin, CreateView):
     model = Path
     fields = ['name', 'author', 'summary', 'refcode', 'task']
     permission_required = 'catalog.add_path'
+
+class PathUpdate(PermissionRequiredMixin, UpdateView):
+    model = Path
+    # Not recommended (potential security issue if more fields added)
+    fields = '__all__'
+    permission_required = 'catalog.change_path'

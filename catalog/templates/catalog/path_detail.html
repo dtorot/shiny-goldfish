@@ -26,3 +26,17 @@
     {% endfor %}
   </div>
 {% endblock %}
+
+{% block sidebar %}
+  {{ block.super }}
+
+  {% if perms.catalog.change_path or perms.catalog.delete_path %}
+  <hr>
+  <ul class="sidebar-nav">
+    {% if perms.catalog.change_path %}
+      <li><a href="{% url 'path-update' path.id %}">Update This Path</a></li>
+    {% endif %}
+    </ul>
+  {% endif %}
+
+{% endblock %}
