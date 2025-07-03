@@ -36,6 +36,9 @@
     {% if perms.catalog.change_path %}
       <li><a href="{% url 'path-update' path.id %}">Update This Path</a></li>
     {% endif %}
+    {% if perms.catalog.delete_path %}
+      <li><a href="{% url 'path-delete' path.id %}">Delete this Path</a></li>
+    {% endif %}
     </ul>
   {% endif %}
 

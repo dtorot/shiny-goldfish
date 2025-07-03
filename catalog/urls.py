@@ -7,6 +7,7 @@ urlpatterns = [
     path('path/<int:pk>', views.PathDetailView.as_view(), name='path-detail'),
     path('path/create/', views.PathCreate.as_view(), name='path-create'),
     path('path/<int:pk>/update/', views.PathUpdate.as_view(), name='path-update'),
+    path('path/<int:pk>/delete/', views.PathDelete.as_view(), name='path-delete'),
     path('guaches/', views.GuacheListView.as_view(), name='guaches'),
     path('guaches/<int:pk>', views.GuacheDetailView.as_view(), name='guache-detail'),
     path('guache/create/', views.GuacheCreate.as_view(), name='guache-create'),

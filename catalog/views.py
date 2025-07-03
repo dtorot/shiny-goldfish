@@ -181,3 +181,17 @@ class PathUpdate(PermissionRequiredMixin, UpdateView):
     # Not recommended (potential security issue if more fields added)
     fields = '__all__'
     permission_required = 'catalog.change_path'
+
+class PathDelete(PermissionRequiredMixin, DeleteView):
+    model = Path
+    success_url = reverse_lazy('paths')
+    permission_required = 'catalog.delete_path'
+
+    def form_valid(self, form):
+        try:
+            self.object.delete()
+            return HttpResponseRedirect(self.success_url)
+        except Exception as e:
+            return HttpResponseRedirect(
+                reverse("path-delete", kwargs={"pk": self.object.pk})
+            )
