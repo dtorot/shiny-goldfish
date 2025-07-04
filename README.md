@@ -1,6 +1,6 @@
-# Django Template Project
+# OpenSAI Learning APP
 
-Template to codespaces...
+With the Isaac Asimov vision of the future of the education, we are playing with a system where everyone is teacher and student, with a own and unique learning path...
 
 ## To start a python virtualenv locally:
 
