@@ -29,26 +29,36 @@ class GuacheModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         # Set up non-modified objects used by all test methods
-        Guache.objects.create(first_name='Big', last_name='Bob')
+        Guache.objects.create(first_name='Alexa', last_name='Xuan', karma=0)
 
     def test_first_name_label(self):
         guache = Guache.objects.get(id=1)
         field_label = guache._meta.get_field('first_name').verbose_name
         self.assertEqual(field_label, 'first name')
 
-    def test_date_of_death_label(self):
+    def test_last_name_label(self):
+        guache = Guache.objects.get(id=1)
+        field_label = guache._meta.get_field('last_name').verbose_name
+        self.assertEqual(field_label, 'last name')
+
+    def test_date_of_creation_label(self):
         guache = Guache.objects.get(id=1)
         field_label = guache._meta.get_field('date_of_birth').verbose_name
-        self.assertEqual(field_label, 'born')
+        self.assertEqual(field_label, 'birth')
 
     def test_first_name_max_length(self):
         guache = Guache.objects.get(id=1)
         max_length = guache._meta.get_field('first_name').max_length
         self.assertEqual(max_length, 100)
 
+    def test_last_name_max_length(self):
+        guache = Guache.objects.get(id=1)
+        max_length = guache._meta.get_field('last_name').max_length
+        self.assertEqual(max_length, 100)
+
     def test_object_name_is_last_name_comma_first_name(self):
         guache = Guache.objects.get(id=1)
-        expected_object_name = f'{guache.last_name}, {guache.first_name}'
+        expected_object_name = f'{guache.last_name},{guache.first_name}'
         self.assertEqual(str(guache), expected_object_name)
 
     def test_get_absolute_url(self):

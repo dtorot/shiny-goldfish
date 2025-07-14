@@ -47,7 +47,7 @@ class Guache (models.Model):
     first_name=models.CharField(max_length=100)
     last_name=models.CharField(max_length=100)
 
-    date_of_birth = models.DateField(null=True, blank=True)
+    date_of_birth = models.DateField('birth', null=True, blank=True)
     last_visit_date = models.DateField('last in', null=True, blank=True)
 
     karma=models.IntegerField()
