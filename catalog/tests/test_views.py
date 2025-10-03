@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from django.urls import reverse
 
-from catalog.models import Author
+from catalog.models import Guache
 
 import datetime
 
@@ -14,7 +14,7 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from catalog.models import Learning, Path, Task, Guache
+from catalog.models import Learning, Task, Path
 
 
 class GuacheListViewTest(TestCase):
@@ -27,6 +27,7 @@ class GuacheListViewTest(TestCase):
             Guache.objects.create(
                 first_name=f'Dominique {guache_id}',
                 last_name=f'Surname {guache_id}',
+                karma=10,
             )
 
     def test_view_url_exists_at_desired_location(self):
@@ -46,19 +47,19 @@ class GuacheListViewTest(TestCase):
         response = self.client.get(reverse('guaches'))
         self.assertEqual(response.status_code, 200)
         self.assertTrue('is_paginated' in response.context)
-        self.assertTrue(response.context['is_paginated'] == True)
-        self.assertEqual(len(response.context['guache_list']), 10)
+        self.assertTrue(response.context['is_paginated'] == False)
+        self.assertEqual(len(response.context['guache_list']), 13)
 
     def test_lists_all_guaches(self):
         # Get second page and confirm it has (exactly) remaining 3 items
         response = self.client.get(reverse('guaches')+'?page=2')
         self.assertEqual(response.status_code, 200)
         self.assertTrue('is_paginated' in response.context)
-        self.assertTrue(response.context['is_paginated'] == True)
-        self.assertEqual(len(response.context['guache_list']), 3)
+        self.assertTrue(response.context['is_paginated'] == False)
+        self.assertEqual(len(response.context['guache_list']), 13)
 
 
-class LoanedBookInstancesByUserListViewTest(TestCase):
+class LearningByUserListViewTest(TestCase):
     def setUp(self):
         # Create two users
         test_user1 = User.objects.create_user(username='testuser1', password='1X<ISRUkw+tuK')
@@ -67,45 +68,42 @@ class LoanedBookInstancesByUserListViewTest(TestCase):
         test_user1.save()
         test_user2.save()
 
-        # Create a book
-        test_guache = Guache.objects.create(first_name='Dominique', last_name='Rousseau')
+        # Create a task
+        test_guache = Guache.objects.create(first_name='Dominique', last_name='Rousseau', karma=10)
         test_path = Path.objects.create(name='Fantasy')
         #test_language = Language.objects.create(name='English')
         test_task = Task.objects.create(
             name='Task Name',
 #            summary='My book summary',
 #            isbn='ABCDEFG',
-            author=test_guache,
+            creator=test_guache,
 #            language=test_language,
         )
 
-        # Create genre as a post-step
-        path_objects_for_task = Path.objects.all()
-        test_task.creator.set(path_objects_for_task) # Direct assignment of many-to-many types not allowed.
-        test_task.save()
+        # Create a path that includes the previous tasks as a post-step
+        # ???
 
-        # Create 30 BookInstance objects
-        number_of_learning_copies = 30
-        for learning_copy in range(number_of_learning_copies):
-            due_back = timezone.localtime() + datetime.timedelta(days=learning_copy%5)
-            the_apprentice = test_user1 if learning_copy % 2 else test_user2
-            status = 'd'
+        # Create 30 Learning objects
+        number_of_learning_instances = 30
+        for learning_instance in range(number_of_learning_instances):
+            due_back = timezone.localtime() + datetime.timedelta(days=learning_instance%5)
+            the_apprentice = test_user1 if learning_instance % 2 else test_user2
+            status = 'm'
             Learning.objects.create(
-                path=test_book,
-                name='Unlikely Imprint, 2016',
+                path=test_path,
+                name='Unlikely Learning Task, 2016',
                 due_back=due_back,
                 apprentice=the_apprentice,
                 status=status,
             )
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(reverse('my-learnings'))
+        self.assertRedirects(response, '/accounts/login/?next=/catalog/mylearnings/')
+
 
 '''
 #to-do 
-#"To verify that the view will redirect to a login page if the user..."
-#LocalLibrary test
-    def test_redirect_if_not_logged_in(self):
-        response = self.client.get(reverse('my-borrowed'))
-        self.assertRedirects(response, '/accounts/login/?next=/catalog/mybooks/')
-
+#We are here >>>> LocalLibrary test: "To verify that the view will redirect to a login page if the user..."
     def test_logged_in_uses_correct_template(self):
         login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
         response = self.client.get(reverse('my-borrowed'))
