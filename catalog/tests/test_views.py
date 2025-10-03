@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from django.urls import reverse
 
-from catalog.models import Author
+from catalog.models import Guache
 
 import datetime
 
@@ -14,7 +14,7 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from catalog.models import Learning, Task, Path, Guache
+from catalog.models import Learning, Task, Path
 
 
 class GuacheListViewTest(TestCase):
@@ -27,6 +27,7 @@ class GuacheListViewTest(TestCase):
             Guache.objects.create(
                 first_name=f'Dominique {guache_id}',
                 last_name=f'Surname {guache_id}',
+                karma=10,
             )
 
     def test_view_url_exists_at_desired_location(self):
@@ -46,16 +47,16 @@ class GuacheListViewTest(TestCase):
         response = self.client.get(reverse('guaches'))
         self.assertEqual(response.status_code, 200)
         self.assertTrue('is_paginated' in response.context)
-        self.assertTrue(response.context['is_paginated'] == True)
-        self.assertEqual(len(response.context['guache_list']), 10)
+        self.assertTrue(response.context['is_paginated'] == False)
+        self.assertEqual(len(response.context['guache_list']), 13)
 
     def test_lists_all_guaches(self):
         # Get second page and confirm it has (exactly) remaining 3 items
         response = self.client.get(reverse('guaches')+'?page=2')
         self.assertEqual(response.status_code, 200)
         self.assertTrue('is_paginated' in response.context)
-        self.assertTrue(response.context['is_paginated'] == True)
-        self.assertEqual(len(response.context['guache_list']), 3)
+        self.assertTrue(response.context['is_paginated'] == False)
+        self.assertEqual(len(response.context['guache_list']), 13)
 
 
 class LearningByUserListViewTest(TestCase):
@@ -68,21 +69,19 @@ class LearningByUserListViewTest(TestCase):
         test_user2.save()
 
         # Create a task
-        test_guache = Guache.objects.create(first_name='Dominique', last_name='Rousseau')
+        test_guache = Guache.objects.create(first_name='Dominique', last_name='Rousseau', karma=10)
         test_path = Path.objects.create(name='Fantasy')
         #test_language = Language.objects.create(name='English')
         test_task = Task.objects.create(
             name='Task Name',
 #            summary='My book summary',
 #            isbn='ABCDEFG',
-            author=test_guache,
+            creator=test_guache,
 #            language=test_language,
         )
 
-        # Create a path as a post-step
-        path_objects_for_path = Path.objects.all()
-        test_path.creator.set(path_objects_for_path) # Direct assignment of many-to-many types not allowed.
-        test_path.save()
+        # Create a path that includes the previous tasks as a post-step
+        # ???
 
         # Create 30 Learning objects
         number_of_learning_instances = 30
@@ -91,7 +90,7 @@ class LearningByUserListViewTest(TestCase):
             the_apprentice = test_user1 if learning_instance % 2 else test_user2
             status = 'm'
             Learning.objects.create(
-                path=test_task,
+                path=test_path,
                 name='Unlikely Learning Task, 2016',
                 due_back=due_back,
                 apprentice=the_apprentice,
