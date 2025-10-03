@@ -14,7 +14,7 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from catalog.models import Learning, Path, Task, Guache
+from catalog.models import Learning, Task, Path, Guache
 
 
 class GuacheListViewTest(TestCase):
@@ -58,7 +58,7 @@ class GuacheListViewTest(TestCase):
         self.assertEqual(len(response.context['guache_list']), 3)
 
 
-class LoanedBookInstancesByUserListViewTest(TestCase):
+class LearningByUserListViewTest(TestCase):
     def setUp(self):
         # Create two users
         test_user1 = User.objects.create_user(username='testuser1', password='1X<ISRUkw+tuK')
@@ -67,7 +67,7 @@ class LoanedBookInstancesByUserListViewTest(TestCase):
         test_user1.save()
         test_user2.save()
 
-        # Create a book
+        # Create a task
         test_guache = Guache.objects.create(first_name='Dominique', last_name='Rousseau')
         test_path = Path.objects.create(name='Fantasy')
         #test_language = Language.objects.create(name='English')
@@ -79,33 +79,32 @@ class LoanedBookInstancesByUserListViewTest(TestCase):
 #            language=test_language,
         )
 
-        # Create genre as a post-step
-        path_objects_for_task = Path.objects.all()
-        test_task.creator.set(path_objects_for_task) # Direct assignment of many-to-many types not allowed.
-        test_task.save()
+        # Create a path as a post-step
+        path_objects_for_path = Path.objects.all()
+        test_path.creator.set(path_objects_for_path) # Direct assignment of many-to-many types not allowed.
+        test_path.save()
 
-        # Create 30 BookInstance objects
-        number_of_learning_copies = 30
-        for learning_copy in range(number_of_learning_copies):
-            due_back = timezone.localtime() + datetime.timedelta(days=learning_copy%5)
-            the_apprentice = test_user1 if learning_copy % 2 else test_user2
-            status = 'd'
+        # Create 30 Learning objects
+        number_of_learning_instances = 30
+        for learning_instance in range(number_of_learning_instances):
+            due_back = timezone.localtime() + datetime.timedelta(days=learning_instance%5)
+            the_apprentice = test_user1 if learning_instance % 2 else test_user2
+            status = 'm'
             Learning.objects.create(
-                path=test_book,
-                name='Unlikely Imprint, 2016',
+                path=test_task,
+                name='Unlikely Learning Task, 2016',
                 due_back=due_back,
                 apprentice=the_apprentice,
                 status=status,
             )
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(reverse('my-learnings'))
+        self.assertRedirects(response, '/accounts/login/?next=/catalog/mylearnings/')
+
 
 '''
 #to-do 
-#"To verify that the view will redirect to a login page if the user..."
-#LocalLibrary test
-    def test_redirect_if_not_logged_in(self):
-        response = self.client.get(reverse('my-borrowed'))
-        self.assertRedirects(response, '/accounts/login/?next=/catalog/mybooks/')
-
+#We are here >>>> LocalLibrary test: "To verify that the view will redirect to a login page if the user..."
     def test_logged_in_uses_correct_template(self):
         login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
         response = self.client.get(reverse('my-borrowed'))
