@@ -69,8 +69,9 @@ class LearningByUserListViewTest(TestCase):
         test_user2.save()
 
         # Create a task
-        test_guache = Guache.objects.create(first_name='Dominique', last_name='Rousseau', karma=10)
-        test_path = Path.objects.create(name='Fantasy')
+        test_guache = Guache.objects.create(first_name='Mr', last_name='Rousseau', karma=10)
+        test_guache_apprentice = Guache.objects.create(first_name='Ms', last_name='Dominique', karma=9)
+        
         #test_language = Language.objects.create(name='English')
         test_task = Task.objects.create(
             name='Task Name',
@@ -81,7 +82,14 @@ class LearningByUserListViewTest(TestCase):
         )
 
         # Create a path that includes the previous tasks as a post-step
-        # ???
+        test_path = Path.objects.create(
+            name='Fantasy',            
+            summary="My powerfull Learning Path",
+            refcode="MPLP039"            
+        )
+        test_path.apprentice.add(test_guache_apprentice)
+        test_path.author=test_guache
+        test_path.task.add(test_task)
 
         # Create 30 Learning objects
         number_of_learning_instances = 30
