@@ -123,6 +123,6 @@ class LearningByUserListViewTest(TestCase):
 
 '''
 #to-do 
-#We are here >>>> LocalLibrary test: "To verify that the view will redirect to a login page if the user..."
+#We are here >>>> LocalLibrary test: "Testing views with forms..."
 
 '''
