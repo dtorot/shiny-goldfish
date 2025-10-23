@@ -108,13 +108,9 @@ class LearningByUserListViewTest(TestCase):
         response = self.client.get(reverse('my-learnings'))
         self.assertRedirects(response, '/accounts/login/?next=/catalog/mylearnings/')
 
-
-'''
-#to-do 
-#We are here >>>> LocalLibrary test: "To verify that the view will redirect to a login page if the user..."
     def test_logged_in_uses_correct_template(self):
         login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
-        response = self.client.get(reverse('my-borrowed'))
+        response = self.client.get(reverse('my-learnings'))
 
         # Check our user is logged in
         self.assertEqual(str(response.context['user']), 'testuser1')
@@ -122,5 +118,11 @@ class LearningByUserListViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Check we used correct template
-        self.assertTemplateUsed(response, 'catalog/bookinstance_list_borrowed_user.html')
+        self.assertTemplateUsed(response, 'catalog/learninginstance_list_apprentice_user.html')
+
+
+'''
+#to-do 
+#We are here >>>> LocalLibrary test: "To verify that the view will redirect to a login page if the user..."
+
 '''
