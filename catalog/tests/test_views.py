@@ -16,6 +16,9 @@ User = get_user_model()
 
 from catalog.models import Learning, Task, Path
 
+import uuid
+
+from django.contrib.auth.models import Permission
 
 class GuacheListViewTest(TestCase):
     @classmethod
@@ -121,8 +124,57 @@ class LearningByUserListViewTest(TestCase):
         self.assertTemplateUsed(response, 'catalog/learninginstance_list_apprentice_user.html')
 
 
-'''
-#to-do 
-#We are here >>>> LocalLibrary test: "Testing views with forms..."
+class RenewLearningViewTest(TestCase):
+    def setUp(self):
+        # Create a user
+        test_user1 = User.objects.create_user(username='testuser1', password='1X<ISRUkw+tuK')
+        test_user2 = User.objects.create_user(username='testuser2', password='2HJ1vRV0Z&3iD')
 
+        test_user1.save()
+        test_user2.save()
+
+        # Give test_user2 permission to renew books.
+        permission = Permission.objects.get(name='Set Learning as changed')
+        test_user2.user_permissions.add(permission)
+        test_user2.save()
+
+        # Create a task
+        test_author = Guache.objects.create(first_name='Dominique', last_name='Rousseau')
+        test_task = Task.objects.create(name='Fantasy')
+        test_path = Path.objects.create(
+            name='Path Title',
+            summary='Another Learning Path summary',
+            refcode='ABCDEFG',
+            author=test_author,
+        )
+
+        # Create genre as a post-step
+        path_objects_for_task = Path.objects.all()
+        test_path.task.set(path_objects_for_task) # Direct assignment of many-to-many types not allowed.
+        test_path.save()
+
+        # Create a Learning object for test_user1
+        return_date = datetime.date.today() + datetime.timedelta(days=5)
+        self.test_learning1 = Learning.objects.create(
+            path=test_path,
+            serial='Unlikely Imprint, 2016',
+            due_back=return_date,
+            apprentice=test_user1,
+            status='w',
+        )
+
+        # Create a BookInstance object for test_user2
+        return_date = datetime.date.today() + datetime.timedelta(days=5)
+        self.test_learning2 = Learning.objects.create(
+            path=test_path,
+            serial='Unlikely Imprint, 2016',
+            due_back=return_date,
+            apprentice=test_user2,
+            status='w',
+        )
+
+'''
+to-do 
+We are here >>>> LocalLibrary test: 
+"Add the following tests to the bottom of the test class. These check that only users..."
 '''
