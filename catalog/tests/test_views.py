@@ -173,8 +173,45 @@ class RenewLearningViewTest(TestCase):
             status='w',
         )
 
+    def test_forbidden_if_logged_in_but_not_correct_permission(self):
+        login = self.client.login(username='test_user1', password='1X<ISRUkw+tuK')
+        response = self.client.get(reverse('renew-learning-master', kwargs={'pk': self.test_learning1.pk}))
+        self.assertEqual(response.status_code, 403)
+'''
+    def test_logged_in_with_permission_borrowed_book(self):
+        login = self.client.login(username='testuser2', password='2HJ1vRV0Z&3iD')
+        response = self.client.get(reverse('renew-book-librarian', kwargs={'pk': self.test_bookinstance2.pk}))
+
+        # Check that it lets us login - this is our book and we have the right permissions.
+        self.assertEqual(response.status_code, 200)
+
+    def test_logged_in_with_permission_another_users_borrowed_book(self):
+        login = self.client.login(username='testuser2', password='2HJ1vRV0Z&3iD')
+        response = self.client.get(reverse('renew-book-librarian', kwargs={'pk': self.test_bookinstance1.pk}))
+
+        # Check that it lets us login. We're a librarian, so we can view any users book
+        self.assertEqual(response.status_code, 200)
+
+    def test_HTTP404_for_invalid_book_if_logged_in(self):
+        # unlikely UID to match our bookinstance!
+        test_uid = uuid.uuid4()
+        login = self.client.login(username='testuser2', password='2HJ1vRV0Z&3iD')
+        response = self.client.get(reverse('renew-book-librarian', kwargs={'pk':test_uid}))
+        self.assertEqual(response.status_code, 404)
+
+    def test_uses_correct_template(self):
+        login = self.client.login(username='testuser2', password='2HJ1vRV0Z&3iD')
+        response = self.client.get(reverse('renew-book-librarian', kwargs={'pk': self.test_bookinstance1.pk}))
+        self.assertEqual(response.status_code, 200)
+
+        # Check we used correct template
+        self.assertTemplateUsed(response, 'catalog/book_renew_librarian.html')
+'''
+
 '''
 to-do 
 We are here >>>> LocalLibrary test: 
 "Add the following tests to the bottom of the test class. These check that only users..."
+
+All the tests are broken, maybe virtualenv configuration
 '''
