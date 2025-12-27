@@ -103,6 +103,7 @@ class LearningsByStaffListView(PermissionRequiredMixin,generic.ListView):
     permission_required = (
     #    'can_mark_completed',
         'catalog.change_learning',
+#        'catalog.can_mark_changed',
     #    'login_required',
     )
 
@@ -113,10 +114,14 @@ class LearningsByStaffListView(PermissionRequiredMixin,generic.ListView):
 
 
 class LearningDetailView(generic.DetailView):
+#class LearningDetailView(PermissionRequiredMixin, generic.DetailView):
     model = Learning
+    #permission_required = ('catalog.change_learning')
+    
 
 def renew_learning_master(request, pk):
     learning = get_object_or_404(Learning, pk=pk)
+    
 
     # If this is a POST request then process the Form data
     if request.method == 'POST':
@@ -144,6 +149,7 @@ def renew_learning_master(request, pk):
     }
 
     return render(request, 'catalog/learning_renew_master.html', context)
+    #return render(request, 'catalog/learninginstance_list_staff_user.html', context)
 
 class GuacheCreate(PermissionRequiredMixin, CreateView):
     model = Guache

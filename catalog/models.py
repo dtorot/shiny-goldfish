@@ -153,7 +153,10 @@ class Learning(models.Model):
 
     class Meta:
         ordering = ['birth']
-        permissions = (("can_mark_completed", "Set Learning Path as Completed..."),)
+        permissions = (
+            ("can_mark_completed", "Set Learning Path as Completed..."),
+            ("can_mark_changed", "Set Learning as changed"),
+                       )
 
     def __str__(self):
         return f'{self.id} ({self.path.name})'
