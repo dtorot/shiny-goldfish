@@ -20,6 +20,13 @@ import uuid
 
 from django.contrib.auth.models import Permission
 
+import logging
+from pprint import pformat, pprint
+
+from bs4 import BeautifulSoup
+
+
+
 class GuacheListViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -71,7 +78,7 @@ class LearningByUserListViewTest(TestCase):
         test_user1.save()
         test_user2.save()
 
-        # Create a task
+        # Create a Guache
         test_guache = Guache.objects.create(first_name='Mr', last_name='Rousseau', karma=10)
         test_guache_apprentice = Guache.objects.create(first_name='Ms', last_name='Dominique', karma=9)
         
@@ -136,38 +143,45 @@ class RenewLearningViewTest(TestCase):
         # Give test_user2 permission to renew books.
         permission = Permission.objects.get(name='Set Learning as changed')
         test_user2.user_permissions.add(permission)
+        test_user2.is_staff=1
         test_user2.save()
 
-        # Create a task
-        test_author = Guache.objects.create(first_name='Dominique', last_name='Rousseau')
-        test_task = Task.objects.create(name='Fantasy')
-        test_path = Path.objects.create(
-            name='Path Title',
-            summary='Another Learning Path summary',
-            refcode='ABCDEFG',
-            author=test_author,
+        # Create a Guache
+        test_author = Guache.objects.create(first_name='Dominique', last_name='Rousseau', karma=10)
+        test_task = Task.objects.create(
+            name='Fantasy',
+            creator=test_author,
         )
 
-        # Create genre as a post-step
-        path_objects_for_task = Path.objects.all()
-        test_path.task.set(path_objects_for_task) # Direct assignment of many-to-many types not allowed.
-        test_path.save()
+        test_path = Path.objects.create(
+            name='Fantasy',            
+            summary="My powerfull Learning Path",
+            refcode="MPLP039",  
+            author=test_author,          
+        )
+
+        test_path.task.add(test_task)
+
+        # Create path as a post-step
+        #path_objects_for_task = Path.objects.all()
+        #test_path.task.set(path_objects_for_task) # Direct assignment of many-to-many types not allowed.
+        #test_path.save()
 
         # Create a Learning object for test_user1
         return_date = datetime.date.today() + datetime.timedelta(days=5)
         self.test_learning1 = Learning.objects.create(
             path=test_path,
-            serial='Unlikely Imprint, 2016',
+            #serial='Unlikely Imprint, 2016',
             due_back=return_date,
             apprentice=test_user1,
             status='w',
         )
 
-        # Create a BookInstance object for test_user2
+        # Create a Learning object for test_user2
         return_date = datetime.date.today() + datetime.timedelta(days=5)
         self.test_learning2 = Learning.objects.create(
             path=test_path,
-            serial='Unlikely Imprint, 2016',
+            #serial='Unlikely Imprint, 2016',
             due_back=return_date,
             apprentice=test_user2,
             status='w',
@@ -175,8 +189,16 @@ class RenewLearningViewTest(TestCase):
 
     def test_forbidden_if_logged_in_but_not_correct_permission(self):
         login = self.client.login(username='test_user1', password='1X<ISRUkw+tuK')
+        #login = self.client.login(username='test_user2', password='2HJ1vRV0Z&3iD')
         #response = self.client.get(reverse('renew-learning-master', kwargs={'pk': self.test_learning1.pk}))
+        response = self.client.get(reverse('learnings'))
+        #pprint(list(response.context))
+        #soup = BeautifulSoup(response.content, "html.parser")
+        #print(soup.prettify())
+
+        
         self.assertEqual(response.status_code, 403)
+        
 '''
     def test_logged_in_with_permission_borrowed_book(self):
         login = self.client.login(username='testuser2', password='2HJ1vRV0Z&3iD')
