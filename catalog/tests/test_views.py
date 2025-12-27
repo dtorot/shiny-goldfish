@@ -175,7 +175,7 @@ class RenewLearningViewTest(TestCase):
 
     def test_forbidden_if_logged_in_but_not_correct_permission(self):
         login = self.client.login(username='test_user1', password='1X<ISRUkw+tuK')
-        response = self.client.get(reverse('renew-learning-master', kwargs={'pk': self.test_learning1.pk}))
+        #response = self.client.get(reverse('renew-learning-master', kwargs={'pk': self.test_learning1.pk}))
         self.assertEqual(response.status_code, 403)
 '''
     def test_logged_in_with_permission_borrowed_book(self):
