@@ -25,6 +25,7 @@ from pprint import pformat, pprint
 
 from bs4 import BeautifulSoup
 
+from catalog.forms import RenewLearningForm
 
 
 class GuacheListViewTest(TestCase):
@@ -187,6 +188,14 @@ class RenewLearningViewTest(TestCase):
             status='w',
         )
 
+    def test_redirect_if_not_logged_in(self):
+        #learning/<int:pk>/renew/', views.renew_learning_master, name='learninginstance_list_staff_user'),]
+        response = self.client.get(reverse('learninginstance_list_staff_user', kwargs={'pk': self.test_learning1.pk}))
+        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+
+'''
     def test_forbidden_if_logged_in_but_not_correct_permission(self):
         login = self.client.login(username='test_user1', password='1X<ISRUkw+tuK')
         #login = self.client.login(username='test_user2', password='2HJ1vRV0Z&3iD')
@@ -194,12 +203,10 @@ class RenewLearningViewTest(TestCase):
         response = self.client.get(reverse('learnings'))
         #pprint(list(response.context))
         #soup = BeautifulSoup(response.content, "html.parser")
-        #print(soup.prettify())
-
-        
+        #print(soup.prettify())        
         self.assertEqual(response.status_code, 403)
         
-'''
+
     def test_logged_in_with_permission_borrowed_book(self):
         login = self.client.login(username='testuser2', password='2HJ1vRV0Z&3iD')
         response = self.client.get(reverse('renew-book-librarian', kwargs={'pk': self.test_bookinstance2.pk}))
