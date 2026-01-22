@@ -193,7 +193,9 @@ class RenewLearningViewTest(TestCase):
         response = self.client.get(reverse('learninginstance_list_staff_user', kwargs={'pk': self.test_learning1.pk}))
         # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
         self.assertEqual(response.status_code, 302)
+        print(response.status_code, type(response))
         self.assertTrue(response.url.startswith('/accounts/login/'))
+        #self.assertRedirects(response, '/accounts/login/')
 
 '''
     def test_forbidden_if_logged_in_but_not_correct_permission(self):

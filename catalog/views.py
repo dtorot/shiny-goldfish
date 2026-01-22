@@ -20,6 +20,39 @@ from .models import Guache
 # Create your views here.
 from .models import Task, Path, Learning, Guache
 
+@login_required
+def renew_learning_master(request, pk):
+    learning = get_object_or_404(Learning, pk=pk)
+
+
+    # If this is a POST request then process the Form data
+    if request.method == 'POST':
+
+        # Create a form instance and populate it with data from the request (binding):
+        form = RenewLearningForm(request.POST)
+
+        # Check if the form is valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required (here we just write it to the model due_back field)
+            learning.due_back = form.cleaned_data['renewal_date']
+            learning.save()
+
+            # redirect to a new URL:
+            return HttpResponseRedirect(reverse('learnings'))
+
+    # If this is a GET (or any other method) create the default form.
+    else:
+        proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
+        form = RenewLearningForm(initial={'renewal_date': proposed_renewal_date})
+
+    context = {
+        'form': form,
+        'learning': learning,
+    }
+
+    return render(request, 'catalog/learning_renew_master.html', context)
+    #return render(request, 'catalog/learninginstance_list_staff_user.html', context)
+
 class PathListView(generic.ListView):
     model = Path
     context_object_name = 'path_list'
@@ -118,39 +151,6 @@ class LearningDetailView(generic.DetailView):
     model = Learning
     #permission_required = ('catalog.change_learning')
     
-
-def renew_learning_master(request, pk):
-    learning = get_object_or_404(Learning, pk=pk)
-    
-
-    # If this is a POST request then process the Form data
-    if request.method == 'POST':
-
-        # Create a form instance and populate it with data from the request (binding):
-        form = RenewLearningForm(request.POST)
-
-        # Check if the form is valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required (here we just write it to the model due_back field)
-            learning.due_back = form.cleaned_data['renewal_date']
-            learning.save()
-
-            # redirect to a new URL:
-            return HttpResponseRedirect(reverse('learnings'))
-
-    # If this is a GET (or any other method) create the default form.
-    else:
-        proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
-        form = RenewLearningForm(initial={'renewal_date': proposed_renewal_date})
-
-    context = {
-        'form': form,
-        'learning': learning,
-    }
-
-    return render(request, 'catalog/learning_renew_master.html', context)
-    #return render(request, 'catalog/learninginstance_list_staff_user.html', context)
-
 class GuacheCreate(PermissionRequiredMixin, CreateView):
     model = Guache
     fields = ['first_name', 'last_name', 'date_of_birth', 'karma', 'last_visit_date']
